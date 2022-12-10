@@ -8,6 +8,9 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
 import RouterProvider from "./components/Routes";
+import { ThemeProvider } from "@mui/material/styles";
+import { darkTheme } from "./themes/palette";
+import CssBaseline from "@mui/material/CssBaseline";
 import reportWebVitals from "./reportWebVitals";
 
 const root = ReactDOM.createRoot(
@@ -16,7 +19,10 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <RouterProvider />
+    <ThemeProvider theme={darkTheme}>
+      <CssBaseline />
+      <RouterProvider />
+    </ThemeProvider>
   </React.StrictMode>
 );
 
