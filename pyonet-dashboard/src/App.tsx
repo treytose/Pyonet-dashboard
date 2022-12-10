@@ -1,4 +1,3 @@
-import "./App.css";
 import { Card, Button } from "@mui/material";
 
 function App() {
@@ -6,7 +5,7 @@ function App() {
     <div className="App">
       <Card sx={{ padding: 2, width: "200px", height: "200px", mt: 4, ml: 4 }}>
         <Button variant="contained" fullWidth sx={{ mb: 1 }}>
-          Hello World
+          Hello Primary
         </Button>
 
         <Button variant="contained" color="secondary" fullWidth>
