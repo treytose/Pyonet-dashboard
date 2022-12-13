@@ -13,6 +13,8 @@ import { darkTheme } from "./themes/palette";
 import CssBaseline from "@mui/material/CssBaseline";
 import reportWebVitals from "./reportWebVitals";
 
+import { AuthContextProvider } from "./contexts/AuthContext";
+
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -20,8 +22,10 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <ThemeProvider theme={darkTheme}>
-      <CssBaseline />
-      <RouterProvider />
+      <AuthContextProvider>
+        <CssBaseline />
+        <RouterProvider />
+      </AuthContextProvider>
     </ThemeProvider>
   </React.StrictMode>
 );
