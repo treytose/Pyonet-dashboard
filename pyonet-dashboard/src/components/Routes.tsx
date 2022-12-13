@@ -1,8 +1,11 @@
-import App from "../App";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import MainLayout from "./Layouts/Main";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  Navigate,
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
 import AuthRequired from "./AuthRequired";
 
 const router = createBrowserRouter([
@@ -11,7 +14,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <App />,
+        element: <Navigate to={"/dashboard"} />,
       },
       {
         path: "dashboard",
