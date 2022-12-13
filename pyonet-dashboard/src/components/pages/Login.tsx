@@ -1,12 +1,6 @@
 import { useContext } from "react";
-import {
-  Alert,
-  Typography,
-  Container,
-  Button,
-  TextField,
-  Box,
-} from "@mui/material";
+import { Alert, Typography, Container, TextField, Box } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { Navigate, useLocation } from "react-router-dom";
@@ -108,9 +102,13 @@ const Login = () => {
             error={formik.touched.password && Boolean(formik.errors.password)}
             type="password"
           />
-          <Button type="submit" variant="contained">
+          <LoadingButton
+            loading={http.loading}
+            type="submit"
+            variant="contained"
+          >
             Login
-          </Button>
+          </LoadingButton>
         </Box>
       </form>
     </Container>

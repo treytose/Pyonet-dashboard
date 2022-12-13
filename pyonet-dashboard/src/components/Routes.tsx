@@ -1,6 +1,5 @@
-import Dashboard from "./pages/Dashboard";
-import Login from "./pages/Login";
 import MainLayout from "./Layouts/Main";
+import { Devices, Dashboard, Login } from "./pages";
 import {
   Navigate,
   createBrowserRouter,
@@ -21,6 +20,14 @@ const router = createBrowserRouter([
         element: (
           <AuthRequired>
             <Dashboard />
+          </AuthRequired>
+        ),
+      },
+      {
+        path: "devices",
+        element: (
+          <AuthRequired>
+            <Devices />
           </AuthRequired>
         ),
       },
