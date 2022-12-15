@@ -1,5 +1,5 @@
 import MainLayout from "./Layouts/Main";
-import { Devices, Dashboard, Login } from "./pages";
+import { Devices, Dashboard, Login, Device } from "./pages";
 import {
   Navigate,
   createBrowserRouter,
@@ -16,20 +16,21 @@ const router = createBrowserRouter([
         element: <Navigate to={"/dashboard"} />,
       },
       {
-        path: "dashboard",
-        element: (
-          <AuthRequired>
-            <Dashboard />
-          </AuthRequired>
-        ),
-      },
-      {
-        path: "devices",
-        element: (
-          <AuthRequired>
-            <Devices />
-          </AuthRequired>
-        ),
+        element: <AuthRequired />,
+        children: [
+          {
+            path: "dashboard",
+            element: <Dashboard />,
+          },
+          {
+            path: "devices",
+            element: <Devices />,
+          },
+          {
+            path: "devices/:id",
+            element: <Device />,
+          },
+        ],
       },
     ],
   },

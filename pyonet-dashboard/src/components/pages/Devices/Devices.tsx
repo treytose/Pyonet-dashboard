@@ -12,6 +12,7 @@ import { Device } from "../../../types";
 import useHttp from "../../../hooks/useHttp";
 import ContentDialog from "../../ContentDialog";
 import DeviceForm from "./DeviceForm";
+import { Link } from "react-router-dom";
 
 const Devices = () => {
   const http = useHttp();
@@ -66,7 +67,14 @@ const Devices = () => {
             rows={rows}
             columns={[
               { field: "id", headerName: "ID", width: 70 },
-              { field: "name", headerName: "Name", width: 130 },
+              {
+                field: "name",
+                headerName: "Name",
+                width: 130,
+                renderCell: (params) => (
+                  <Link to={`/devices/${params.id}`}>{params.value}</Link>
+                ),
+              },
               { field: "description", headerName: "Description", flex: 2 },
               { field: "hostname", headerName: "Hostname", width: 130 },
             ]}
