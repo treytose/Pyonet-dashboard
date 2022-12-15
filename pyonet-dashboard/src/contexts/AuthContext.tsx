@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect } from "react";
+import useHttp from "../hooks/useHttp";
 
 type AuthContextType = {
   token: string;
@@ -13,7 +14,24 @@ export const AuthContext = createContext<AuthContextType>({
 });
 
 export const AuthContextProvider = ({ children }: any) => {
+  const http = useHttp();
   const [token, setTokenState] = useState("");
+
+  // Check if the token is still valid
+  useEffect(() => {
+    if (token) {
+      http
+        .get("/auth/verify", { headers: { Authorization: `Bearer ${token}` } })
+        .then((res) => {
+          if (!res) {
+            logout();
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [token]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
