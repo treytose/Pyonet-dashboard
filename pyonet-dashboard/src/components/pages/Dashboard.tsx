@@ -21,6 +21,9 @@ const Dashboard = () => {
         <Link to="/devices">
           <Button variant="contained"> Devices </Button>
         </Link>
+        <Link to="/pollers">
+          <Button variant="contained"> Pollers </Button>
+        </Link>
       </Stack>
     </Container>
   );

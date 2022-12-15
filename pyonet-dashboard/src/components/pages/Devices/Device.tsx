@@ -53,7 +53,7 @@ const DevicePage = () => {
         </Box>
       </ContentDialog>
 
-      <Container sx={{ mt: 10 }}>
+      <Container sx={{ mt: 8 }}>
         {device && (
           <>
             <Box>

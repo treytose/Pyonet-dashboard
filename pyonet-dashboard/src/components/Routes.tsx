@@ -1,5 +1,12 @@
 import MainLayout from "./Layouts/Main";
-import { Devices, Dashboard, Login, Device } from "./pages";
+import {
+  Devices,
+  Dashboard,
+  Login,
+  Device,
+  Pollers,
+  PollerView,
+} from "./pages";
 import {
   Navigate,
   createBrowserRouter,
@@ -29,6 +36,14 @@ const router = createBrowserRouter([
           {
             path: "devices/:id",
             element: <Device />,
+          },
+          {
+            path: "pollers",
+            element: <Pollers />,
+          },
+          {
+            path: "pollers/:id",
+            element: <PollerView />,
           },
         ],
       },
