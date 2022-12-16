@@ -147,8 +147,11 @@ function ResponsiveAppBar() {
                     bgcolor: theme.palette.primary.main,
                   }}
                 >
-                  <Typography variant="h6" sx={{ color: "white" }}>
-                    A
+                  <Typography
+                    variant="h6"
+                    sx={{ color: "white", textTransform: "uppercase" }}
+                  >
+                    {auth.user?.username[0]}
                   </Typography>
                 </Avatar>
               </IconButton>

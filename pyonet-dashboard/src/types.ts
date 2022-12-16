@@ -1,3 +1,8 @@
+export interface User {
+  userid: number;
+  username: string;
+}
+
 export interface Device {
   deviceid: number;
   name: string;
