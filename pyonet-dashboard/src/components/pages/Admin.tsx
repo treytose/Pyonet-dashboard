@@ -14,9 +14,10 @@ import FastForm from "../FastForm";
 import ContentDialog from "../ContentDialog";
 import useHttp from "../../hooks/useHttp";
 
+import UserPanel from "../blocks/admin/UserPanel";
+
 const AdminPanel = () => {
   const http = useHttp();
-  const [users, setUsers] = useState<User[]>([]);
   const [roles, setRoles] = useState<Role[]>([]);
   const [permissions, setPermissions] = useState<Permission[]>([]);
 
@@ -26,42 +27,8 @@ const AdminPanel = () => {
 
   const [currentTab, setCurrentTab] = useState<number>(0);
 
-  const loadUsers = () => {
-    http.get("/user").then((resp) => {
-      if (resp) {
-        setUsers(resp.data.data);
-      }
-    });
-  };
-
-  useEffect(() => {
-    loadUsers();
-
-    http.get("/role").then((resp) => {
-      if (resp) {
-        setRoles(resp.data.data);
-      }
-    });
-
-    http.get("/permission").then((resp) => {
-      if (resp) {
-        setPermissions(resp.data.data);
-      }
-    });
-  }, []);
-
   return (
     <>
-      <ContentDialog open={userFormOpen} onClose={() => setUserFormOpen(false)}>
-        <FastForm
-          entityName="user"
-          onCreated={() => {
-            setUserFormOpen(false);
-            loadUsers();
-          }}
-        />
-      </ContentDialog>
-
       <Container sx={{ mt: 8 }}>
         <Typography variant="h4"> Admin Dashboard </Typography>
         <br />
@@ -77,25 +44,7 @@ const AdminPanel = () => {
           <Tab label="Permissions" />
         </Tabs>
         <br />
-        {currentTab === 0 && (
-          <>
-            <Typography variant="h6"> Users </Typography>
-            <Box sx={{ height: "400px", width: "100%" }}>
-              <DataGrid
-                disableSelectionOnClick
-                rows={users}
-                columns={[
-                  { field: "id", headerName: "ID", width: 70 },
-                  { field: "username", headerName: "Username", width: 130 },
-                ]}
-                getRowId={(row) => row.userid}
-                pageSize={5}
-                rowsPerPageOptions={[5, 10, 20, 50, 100]}
-              />
-            </Box>
-            <Button onClick={() => setUserFormOpen(true)}> Add User </Button>
-          </>
-        )}
+        {currentTab === 0 && <UserPanel />}
 
         {currentTab === 1 && (
           <>

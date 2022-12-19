@@ -1,6 +1,7 @@
 export interface User {
   userid: number;
   username: string;
+  create_date: string;
   roles?: Role[];
 }
 
