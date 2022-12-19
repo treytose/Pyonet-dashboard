@@ -1,9 +1,15 @@
-import { IconButton, Dialog, DialogTitle, DialogContent } from "@mui/material";
+import {
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Typography,
+} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
 export interface ContentDialogProps {
   open: boolean;
-  title: string;
+  title?: string;
   children: React.ReactNode;
   onClose: () => void;
   maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | false;
@@ -25,7 +31,7 @@ const ContentDialog = ({
           alignItems: "center",
         }}
       >
-        {title}
+        <Typography> {title || ""}</Typography>
         <IconButton onClick={onClose}>
           <CloseIcon />
         </IconButton>

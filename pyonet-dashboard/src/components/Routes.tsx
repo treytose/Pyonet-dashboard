@@ -6,6 +6,7 @@ import {
   Device,
   Pollers,
   PollerView,
+  AdminPanel,
 } from "./pages";
 import {
   Navigate,
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
           {
             path: "pollers/:id",
             element: <PollerView />,
+          },
+          {
+            path: "admin",
+            element: <AdminPanel />,
           },
         ],
       },

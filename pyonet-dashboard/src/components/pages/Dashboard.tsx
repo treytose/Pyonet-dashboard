@@ -24,6 +24,9 @@ const Dashboard = () => {
         <Link to="/pollers">
           <Button variant="contained"> Pollers </Button>
         </Link>
+        <Link to="/admin">
+          <Button variant="contained"> Admin </Button>
+        </Link>
       </Stack>
     </Container>
   );

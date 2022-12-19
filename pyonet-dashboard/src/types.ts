@@ -1,6 +1,19 @@
 export interface User {
   userid: number;
   username: string;
+  roles?: Role[];
+}
+
+export interface Permission {
+  permissionid: number;
+  name: string;
+  description: string;
+}
+
+export interface Role {
+  roleid: number;
+  name: string;
+  description: string;
 }
 
 export interface Device {
