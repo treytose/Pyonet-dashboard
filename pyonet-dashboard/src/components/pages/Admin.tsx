@@ -14,7 +14,7 @@ import FastForm from "../FastForm";
 import ContentDialog from "../ContentDialog";
 import useHttp from "../../hooks/useHttp";
 
-import UserPanel from "../blocks/admin/UserPanel";
+import UserPanel from "../blocks/admin/UserPanel/UserPanel";
 
 const AdminPanel = () => {
   const http = useHttp();
