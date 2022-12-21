@@ -15,6 +15,7 @@ export interface Role {
   roleid: number;
   name: string;
   description: string;
+  permissions?: Permission[];
 }
 
 export interface Device {

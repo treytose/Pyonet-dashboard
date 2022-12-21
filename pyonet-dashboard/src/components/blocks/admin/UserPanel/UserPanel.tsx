@@ -94,7 +94,10 @@ const UserPanel = () => {
             {
               field: "action",
               headerName: "Edit",
-              width: 150,
+              width: 70,
+              disableReorder: true,
+              disableColumnMenu: true,
+              sortable: false,
               renderCell: (params) => (
                 <IconButton
                   color="primary"
@@ -108,7 +111,7 @@ const UserPanel = () => {
             },
           ]}
           getRowId={(row) => row.userid}
-          pageSize={5}
+          pageSize={20}
           rowsPerPageOptions={[5, 10, 20, 50, 100]}
         />
       </Box>
