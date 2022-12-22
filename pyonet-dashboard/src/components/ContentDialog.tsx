@@ -4,6 +4,7 @@ import {
   DialogTitle,
   DialogContent,
   Typography,
+  Box,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -36,7 +37,9 @@ const ContentDialog = ({
           <CloseIcon />
         </IconButton>
       </DialogTitle>
-      <DialogContent>{children}</DialogContent>
+      <DialogContent>
+        <Box sx={{ padding: "1rem" }}>{children}</Box>
+      </DialogContent>
     </Dialog>
   );
 };

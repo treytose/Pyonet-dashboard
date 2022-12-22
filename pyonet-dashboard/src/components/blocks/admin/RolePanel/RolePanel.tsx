@@ -1,27 +1,67 @@
 import { useState, useEffect } from "react";
-import { Box, Typography, IconButton } from "@mui/material";
+import { Box, Typography, IconButton, Button } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import { DataGrid } from "@mui/x-data-grid";
 import { Role } from "../../../../types";
 import useHttp from "../../../../hooks/useHttp";
 
+import ContentDialog from "../../../ContentDialog";
+import CreateForm from "./components/CreateForm";
+import EditForm from "./components/EditForm";
+
 const RolePanel = () => {
   const http = useHttp();
   const [roles, setRoles] = useState<Role[]>([]);
+  const [createFormOpen, setCreateFormOpen] = useState(false);
+  const [selectedRole, setSelectedRole] = useState<Role | null>(null);
 
-  useEffect(() => {
+  const updateRoles = () => {
     http.get("/role", { params: { joined: true } }).then((resp) => {
       if (resp) {
         console.log(resp);
         setRoles(resp.data.data);
       }
     });
+  };
+
+  useEffect(() => {
+    updateRoles();
   }, []);
 
   return (
     <>
+      <ContentDialog
+        title="Create Role"
+        open={createFormOpen}
+        onClose={() => setCreateFormOpen(false)}
+      >
+        <CreateForm
+          onCreate={() => {
+            updateRoles();
+            setCreateFormOpen(false);
+          }}
+        />
+      </ContentDialog>
+
+      <ContentDialog
+        title="Edit Role"
+        open={!!selectedRole}
+        onClose={() => setSelectedRole(null)}
+      >
+        {selectedRole && (
+          <EditForm
+            role={selectedRole}
+            onEdit={() => {
+              updateRoles();
+              setSelectedRole(null);
+            }}
+          />
+        )}
+      </ContentDialog>
+
       <Typography variant="h6"> Roles </Typography>
-      <Box sx={{ height: "300px", width: "100%" }}>
+      <Box sx={{ height: "400px", width: "100%" }}>
         <DataGrid
           disableSelectionOnClick
           rows={roles}
@@ -34,9 +74,11 @@ const RolePanel = () => {
               headerName: "Permissions",
               width: 130,
               renderCell: (params) => {
-                return params.row.permissions?.map((permission) => {
-                  return <p>{permission.name}</p>;
-                });
+                return (
+                  <Typography variant="body2">
+                    {params.row.permissions?.map((p) => p.name).join(", ")}
+                  </Typography>
+                );
               },
               flex: 2,
             },
@@ -49,7 +91,12 @@ const RolePanel = () => {
               sortable: false,
               renderCell: (params) => {
                 return (
-                  <IconButton color="primary">
+                  <IconButton
+                    color="primary"
+                    onClick={() => {
+                      setSelectedRole(params.row);
+                    }}
+                  >
                     <EditIcon />
                   </IconButton>
                 );
@@ -60,6 +107,16 @@ const RolePanel = () => {
           rowsPerPageOptions={[5, 10, 20, 50, 100]}
           pageSize={20}
         />
+      </Box>
+      <Box>
+        <Button
+          variant="text"
+          color="primary"
+          startIcon={<AddIcon />}
+          onClick={() => setCreateFormOpen(true)}
+        >
+          Create Role
+        </Button>
       </Box>
     </>
   );

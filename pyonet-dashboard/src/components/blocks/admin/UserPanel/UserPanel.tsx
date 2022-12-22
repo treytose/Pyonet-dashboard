@@ -36,7 +36,6 @@ const UserPanel = () => {
         onClose={() => setUserFormOpen(false)}
         title="Add User"
       >
-        <br />
         <CreateUserForm
           onCreated={() => {
             setUserFormOpen(false);
@@ -50,7 +49,6 @@ const UserPanel = () => {
         onClose={() => setSelectedEditUser(null)}
         title="Edit User"
       >
-        <br />
         {selectedEditUser && (
           <EditUserForm
             user={selectedEditUser}
