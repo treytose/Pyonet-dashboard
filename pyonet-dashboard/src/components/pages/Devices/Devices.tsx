@@ -5,8 +5,10 @@ import {
   Backdrop,
   CircularProgress,
   Box,
+  IconButton,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
 import { DataGrid, GridRowsProp } from "@mui/x-data-grid";
 import { Device } from "../../../types";
 import useHttp from "../../../hooks/useHttp";
@@ -16,11 +18,13 @@ import { Link } from "react-router-dom";
 
 const Devices = () => {
   const http = useHttp();
-  const [rows, setRows] = useState<GridRowsProp>([]);
+  const [devices, setDevices] = useState<Device[]>([]);
   const [deviceFormOpen, setDeviceFormOpen] = useState(false);
+  const [selectedDevice, setSelectedDevice] = useState<Device>();
 
   const handleDeviceCreated = () => {
     setDeviceFormOpen(false);
+    setSelectedDevice(undefined);
     // reload devices
     loadDevices();
   };
@@ -29,16 +33,7 @@ const Devices = () => {
     http.get("/device").then((response) => {
       if (response) {
         // format rows for DataGrid
-        setRows(
-          response.data.data.map((device: Device) => {
-            return {
-              id: device.deviceid,
-              name: device.name,
-              description: device.description,
-              hostname: device.hostname,
-            };
-          })
-        );
+        setDevices(response.data.data);
       }
     });
   };
@@ -50,11 +45,14 @@ const Devices = () => {
   return (
     <>
       <ContentDialog
-        title="Add Device"
+        title={selectedDevice ? "Edit Device" : "Add Device"}
         open={deviceFormOpen}
-        onClose={() => setDeviceFormOpen(false)}
+        onClose={() => {
+          setDeviceFormOpen(false);
+          setSelectedDevice(undefined);
+        }}
       >
-        <DeviceForm onCreated={handleDeviceCreated} />
+        <DeviceForm onCreated={handleDeviceCreated} device={selectedDevice} />
       </ContentDialog>
 
       <Backdrop open={http.loading}>
@@ -64,7 +62,8 @@ const Devices = () => {
         <h1>Devices</h1>
         <Box sx={{ height: 400 }}>
           <DataGrid
-            rows={rows}
+            getRowId={(row) => row.deviceid}
+            rows={devices}
             columns={[
               { field: "id", headerName: "ID", width: 70 },
               {
@@ -77,6 +76,21 @@ const Devices = () => {
               },
               { field: "description", headerName: "Description", flex: 2 },
               { field: "hostname", headerName: "Hostname", width: 130 },
+              {
+                field: "edit",
+                headerName: "Edit",
+                width: 70,
+                renderCell: (params) => (
+                  <IconButton
+                    onClick={() => {
+                      setSelectedDevice(params.row as Device);
+                      setDeviceFormOpen(true);
+                    }}
+                  >
+                    <EditIcon color="primary" />
+                  </IconButton>
+                ),
+              },
             ]}
             pageSize={100}
             rowsPerPageOptions={[10, 20, 50, 100, 500]}

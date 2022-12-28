@@ -27,7 +27,7 @@ export interface Device {
   snmp_community: string;
   snmp_port: number;
   pollerid: number;
-  poller?: any;
+  poller?: Poller;
 }
 
 export interface Poller {
