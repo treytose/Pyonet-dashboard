@@ -40,6 +40,7 @@ export interface Poller {
 export interface Check {
   checkid: number;
   name: string;
+  description: string;
   config_json: Object;
   check_interval: number;
   check_type: string;

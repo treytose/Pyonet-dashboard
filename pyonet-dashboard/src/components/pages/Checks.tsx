@@ -19,6 +19,7 @@ const Checks = () => {
   const http = useHttp();
   const [showForm, setShowForm] = useState(false);
   const [checks, setChecks] = useState<Check[]>([]);
+  const [selectedCheck, setSelectedCheck] = useState<Check>();
 
   const loadChecks = () => {
     http.get("/check").then((res) => {
@@ -37,10 +38,15 @@ const Checks = () => {
       <ContentDialog
         title="Create Check"
         open={showForm}
-        onClose={() => setShowForm(false)}
+        onClose={() => {
+          setShowForm(false);
+          setSelectedCheck(undefined);
+        }}
       >
         <CheckForm
+          check={selectedCheck}
           onCreated={() => {
+            setSelectedCheck(undefined);
             setShowForm(false);
             loadChecks();
           }}
@@ -82,7 +88,13 @@ const Checks = () => {
                 headerName: "Edit",
                 width: 70,
                 renderCell: (params) => (
-                  <IconButton color="primary">
+                  <IconButton
+                    color="primary"
+                    onClick={() => {
+                      setShowForm(true);
+                      setSelectedCheck(params.row);
+                    }}
+                  >
                     <EditIcon />
                   </IconButton>
                 ),
