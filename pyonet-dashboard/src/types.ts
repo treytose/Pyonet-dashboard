@@ -36,3 +36,11 @@ export interface Poller {
   description: string;
   api_key: string;
 }
+
+export interface Check {
+  checkid: number;
+  name: string;
+  config_json: Object;
+  check_interval: number;
+  check_type: string;
+}
