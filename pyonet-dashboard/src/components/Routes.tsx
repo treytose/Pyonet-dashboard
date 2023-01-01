@@ -14,6 +14,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import AuthRequired from "./AuthRequired";
+import Checks from "./pages/Checks";
 
 const router = createBrowserRouter([
   {
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
           {
             path: "admin",
             element: <AdminPanel />,
+          },
+          {
+            path: "checks",
+            element: <Checks />,
           },
         ],
       },

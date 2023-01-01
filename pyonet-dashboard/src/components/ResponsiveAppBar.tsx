@@ -15,13 +15,20 @@ import {
 } from "@mui/material";
 import AdbIcon from "@mui/icons-material/Adb";
 import MenuIcon from "@mui/icons-material/Menu";
-
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 
-const pages = [{ label: "Dashboard", href: "/dashboard" }];
+const pages = [
+  { label: "Dashboard", href: "/dashboard" },
+  { label: "Devices", href: "/devices" },
+  { label: "Pollers", href: "/pollers" },
+  { label: "Admin", href: "/admin" },
+  { label: "Checks", href: "/checks" },
+];
 
 function ResponsiveAppBar() {
+  const location = useLocation();
+
   const auth = useAuth();
   const theme = useTheme();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -126,10 +133,23 @@ function ResponsiveAppBar() {
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
-              <Link to={page.href} key={page.href}>
+              <Link
+                to={page.href}
+                key={page.href}
+                style={{
+                  textDecoration: "none",
+                }}
+              >
                 <Button
                   onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: "white", display: "block" }}
+                  sx={{
+                    my: 2,
+                    color:
+                      location.pathname === page.href
+                        ? theme.palette.primary.main
+                        : "white",
+                    display: "block",
+                  }}
                 >
                   {page.label}
                 </Button>
