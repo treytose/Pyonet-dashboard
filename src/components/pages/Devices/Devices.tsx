@@ -65,11 +65,11 @@ const Devices = () => {
             getRowId={(row) => row.deviceid}
             rows={devices}
             columns={[
-              { field: "id", headerName: "ID", width: 70 },
+              { field: "deviceid", headerName: "ID", width: 70 },
               {
                 field: "name",
                 headerName: "Name",
-                width: 130,
+                flex: 1,
                 renderCell: (params) => (
                   <Link to={`/devices/${params.id}`}>{params.value}</Link>
                 ),

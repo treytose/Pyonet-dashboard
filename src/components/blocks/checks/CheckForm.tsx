@@ -18,7 +18,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import useHttp from "../../../hooks/useHttp";
 import useConfirm from "../../../hooks/useConfirm";
-import { Check } from "../../../types";
+import { DeviceCheck as Check } from "../../../types";
 
 interface Props {
   onCreated: (values: any) => void;
@@ -34,22 +34,12 @@ const CheckForm = ({ onCreated, check }: Props) => {
   const confirm = useConfirm();
   const [configJSON, setConfigJSON] = useState<ConfigJSON>({});
 
-  useEffect(() => {
-    if (check?.config_json) {
-      if (typeof check.config_json === "string") {
-        setConfigJSON(JSON.parse(check.config_json));
-      } else {
-        setConfigJSON(check.config_json);
-      }
-    }
-  }, [check]);
-
   const handleDelete = () => {
     confirm.show(
       "Are you sure?",
       "Deleting this check will remove it from any associated devices",
       () => {
-        http.delete(`/check/${check?.checkid}`).then((res) => {
+        http.delete(`/check/${check?.device_checkid}`).then((res) => {
           if (res) {
             onCreated({});
           }
@@ -79,7 +69,7 @@ const CheckForm = ({ onCreated, check }: Props) => {
       };
 
       if (check) {
-        http.put(`/check/${check.checkid}`, data).then((res) => {
+        http.put(`/check/${check.device_checkid}`, data).then((res) => {
           if (res) {
             onCreated(values);
           }

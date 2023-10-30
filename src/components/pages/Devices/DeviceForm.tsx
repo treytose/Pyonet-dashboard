@@ -44,7 +44,6 @@ const DeviceForm = ({ onCreated, device }: DeviceFormProps) => {
 
   //load pollers
   useEffect(() => {
-    console.log(device);
     http.get("/poller").then((response) => {
       if (response) {
         setPollers(response.data.data);

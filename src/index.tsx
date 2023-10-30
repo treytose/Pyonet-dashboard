@@ -25,6 +25,7 @@ root.render(
       <AuthContextProvider>
         <CssBaseline />
         <RouterProvider />
+        <div id="snackbar_container"></div>
       </AuthContextProvider>
     </ThemeProvider>
   </React.StrictMode>

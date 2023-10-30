@@ -37,11 +37,23 @@ export interface Poller {
   api_key: string;
 }
 
-export interface Check {
-  checkid: number;
+export interface GroupedDeviceChecks {
+  groups: {[key: number]: {
+    device_check_groupid: number;
+    name: string;
+    description: string;
+    checks: DeviceCheck[];
+  }};  
+  checks: DeviceCheck[];
+}
+
+export interface DeviceCheck {
+  device_checkid: number;
+  deviceid: number;  
+  device_check_groupid: number;
   name: string;
-  description: string;
-  config_json: Object;
+  description: string;  
   check_interval: number;
   check_type: string;
+  oid: string;
 }

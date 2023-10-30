@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import axios, { AxiosRequestConfig, AxiosError, AxiosResponse } from "axios";
 import { AuthContext } from "../contexts/AuthContext";
 
@@ -10,9 +10,13 @@ const useHttp = () => {
   const getAuthHeader = () => {
     return authCtx.token
       ? {
-          headers: { Authorization: `Bearer ${authCtx.token}` },
-        }
+        headers: { Authorization: `Bearer ${authCtx.token}` },
+      }
       : {};
+  };
+
+  const prependBaseUrl = (path: string) => {
+    return path.startsWith("/api") ? path : `/api${path}`;
   };
 
   const handleError = (error: Error | AxiosError) => {
@@ -24,12 +28,18 @@ const useHttp = () => {
       if (data && data.detail) {
         setError(data.detail);
       } else {
-        setError(error.message);
+        setError(error.message.toString());
       }
     } else {
       setError("An unknown error occurred");
     }
   };
+
+  useEffect(() => {
+    if (error) {
+      console.error(error);
+    }
+  }, [error]);
 
   return {
     error,
@@ -43,8 +53,9 @@ const useHttp = () => {
 
       try {
         config.headers = { ...getAuthHeader().headers, ...config.headers };
-        const response = await axios.get(path, config);
-        setLoading(false);
+        const response = await axios.get(prependBaseUrl(path), config);
+        setTimeout(() => setLoading(false), 100);
+        // setLoading(false);
         return response;
       } catch (error) {
         return handleError(error as Error);
@@ -59,8 +70,9 @@ const useHttp = () => {
       setError("");
       config.headers = { ...getAuthHeader().headers, ...config.headers };
       try {
-        const response = await axios.post(path, data, config);
-        setLoading(false);
+        const response = await axios.post(prependBaseUrl(path), data, config);
+        setTimeout(() => setLoading(false), 100);
+        // setLoading(false);
         return response;
       } catch (error) {
         console.error(error);
@@ -77,8 +89,9 @@ const useHttp = () => {
       setError("");
       config.headers = { ...getAuthHeader().headers, ...config.headers };
       try {
-        const response = await axios.put(path, data, config);
-        setLoading(false);
+        const response = await axios.put(prependBaseUrl(path), data, config);
+        setTimeout(() => setLoading(false), 100);
+        // setLoading(false);
         return response;
       } catch (error) {
         console.log(error);
@@ -94,13 +107,31 @@ const useHttp = () => {
       setError("");
       config.headers = { ...getAuthHeader().headers, ...config.headers };
       try {
-        const response = await axios.delete(path, config);
+        const response = await axios.delete(prependBaseUrl(path), config);
         setLoading(false);
         return response;
       } catch (error) {
         return handleError(error as AxiosError);
       }
     },
+    getFile: async (
+      path: string,
+      config: AxiosRequestConfig = {}
+    ): Promise<AxiosResponse | void> => {
+      setLoading(true);
+      setError("");
+      config.headers = { ...getAuthHeader().headers, ...config.headers };
+      try {
+        const response = await axios.get(prependBaseUrl(path), {
+          responseType: "blob",
+          ...config,
+        });
+        setLoading(false);
+        return response;
+      } catch (error) {
+        return handleError(error as AxiosError);
+      }
+    }
   };
 };
 

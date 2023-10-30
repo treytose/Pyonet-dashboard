@@ -10,7 +10,7 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { Check } from "../../types";
+import { DeviceCheck as Check } from "../../types";
 import ContentDialog from "../ContentDialog";
 import CheckForm from "../blocks/checks/CheckForm";
 import useHttp from "../../hooks/useHttp";
@@ -100,7 +100,7 @@ const Checks = () => {
                 ),
               },
             ]}
-            getRowId={(row) => row.checkid}
+            getRowId={(row) => row.device_checkid}
             disableSelectionOnClick
             pageSize={100}
             rowsPerPageOptions={[10, 20, 50, 100, 500]}
