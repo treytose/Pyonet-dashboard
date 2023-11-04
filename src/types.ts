@@ -35,6 +35,8 @@ export interface Poller {
   name: string;
   description: string;
   api_key: string;
+  hostname: string;
+  port: number;
 }
 
 export interface GroupedDeviceChecks {

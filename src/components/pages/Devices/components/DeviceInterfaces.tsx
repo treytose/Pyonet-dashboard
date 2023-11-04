@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import useHttp from "../../../../hooks/useHttp"
 import { Button, Card, Checkbox, CircularProgress, Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Stack } from "@mui/material";
-import { Device } from "../../../../types";
+import { Device, GroupedDeviceChecks } from "../../../../types";
 import useSnackbar from "../../../../hooks/useSnackbar";
+import usePollerHttp from "../../../../hooks/usePollerHttp";
 
 interface Props {
   device: Device;
@@ -28,24 +29,45 @@ interface InterfaceSelection {
 const DeviceInterfaces = ({ device, onMonitorSelected }: Props) => {
 
   const http = useHttp();
+  const pollerHttp = usePollerHttp({ pollerid: device.pollerid });
   const snackbar = useSnackbar();
+  const [checks, setChecks] = useState<GroupedDeviceChecks>();
   const [resp, setResp] = useState<InterfaceData>();
   const [selectedInterfaces, setSelectedInterfaces] = useState<InterfaceSelection[]>([]);
 
   useEffect(() => {
-    http.post("/device-poller", {
-      "deviceid": device.deviceid,
-      "route": "/poller/scan-interfaces",
-      "params": { deviceid: device.deviceid }
-    }).then((resp) => {
+    http.get("/device-check/by-device/" + device.deviceid, { params: { grouped: true } }).then((res) => {
+      if (res) {
+        setChecks(res.data);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    pollerHttp.get("/poller/scan-interfaces", { params: { deviceid: device.deviceid } }).then((resp) => {
       if (resp) {
         setResp(resp.data);
       }
     })
   }, [device]);
 
-  const handleMonitorSelected = () => {
 
+  const checkIfAlreadyMonitored = useCallback((interfaceName: string) => {
+    if (!checks) return false;
+    let alreadyMonitored = false;
+    Object.keys(checks.groups).forEach((groupid: any) => {
+      const group = checks.groups[groupid];
+      const groupChecks = group.checks;
+      groupChecks.forEach((check: any) => {
+        if (check.name.includes(interfaceName)) {
+          alreadyMonitored = true;
+        }
+      });
+    });
+    return alreadyMonitored;
+  }, [checks]);
+
+  const handleMonitorSelected = () => {
     selectedInterfaces.forEach((interfaceData, idx) => {
       http.post("/device-check-group", {
         "name": `${interfaceData.interface}`,
@@ -87,7 +109,7 @@ const DeviceInterfaces = ({ device, onMonitorSelected }: Props) => {
       {snackbar.render()}
       <Typography variant="h5">Interfaces</Typography>
       <Box>
-        {http.loading && !resp && (
+        {pollerHttp.loading && !resp && (
           <Box>
             <Stack direction="row" spacing={2} alignItems="center">
               <Typography>Scanning Interfaces...</Typography>
@@ -124,25 +146,33 @@ const DeviceInterfaces = ({ device, onMonitorSelected }: Props) => {
                   <TableBody>
                     {Object.keys(resp).map((key) => {
                       const interfaceData = resp[key];
+                      const alreadyMonitored = checkIfAlreadyMonitored(key);
                       return (
                         <TableRow key={key}>
                           <TableCell>{key}</TableCell>
                           <TableCell>{interfaceData.ifHCInOctetsValue}</TableCell>
                           <TableCell>{interfaceData.ifHCOutOctetsValue}</TableCell>
                           <TableCell>
-                            <Checkbox
-                              onChange={(e) => {
-                                if (e.target.checked) {
-                                  setSelectedInterfaces([...selectedInterfaces, {
-                                    interface: key,
-                                    inOctetsOID: interfaceData.ifHCInOctetsOID,
-                                    outOctetsOID: interfaceData.ifHCOutOctetsOID
-                                  }])
-                                } else {
-                                  setSelectedInterfaces(selectedInterfaces.filter((i) => i.interface != key));
-                                }
-                              }}
-                            />
+                            {
+                              alreadyMonitored ? (
+                                <Typography variant="caption" color="info">Already Monitored</Typography>
+                              ) : (
+                                <Checkbox
+                                  disabled={alreadyMonitored}
+                                  onChange={(e) => {
+                                    if (e.target.checked) {
+                                      setSelectedInterfaces([...selectedInterfaces, {
+                                        interface: key,
+                                        inOctetsOID: interfaceData.ifHCInOctetsOID,
+                                        outOctetsOID: interfaceData.ifHCOutOctetsOID
+                                      }])
+                                    } else {
+                                      setSelectedInterfaces(selectedInterfaces.filter((i) => i.interface != key));
+                                    }
+                                  }}
+                                />
+                              )
+                            }
                           </TableCell>
                         </TableRow>
                       )
