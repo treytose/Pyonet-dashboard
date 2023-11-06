@@ -59,7 +59,7 @@ const DeviceInterfaces = ({ device, onMonitorSelected }: Props) => {
       const group = checks.groups[groupid];
       const groupChecks = group.checks;
       groupChecks.forEach((check: any) => {
-        if (check.name.includes(interfaceName)) {
+        if (check.name.includes(interfaceName) || group.name.includes(interfaceName)) {
           alreadyMonitored = true;
         }
       });
@@ -77,7 +77,7 @@ const DeviceInterfaces = ({ device, onMonitorSelected }: Props) => {
         if (resp) {
           const checkGroupID = resp.data;
           http.post("/device-check", {
-            "name": `${interfaceData.interface} - Out Octets`,
+            "name": "outOctets",
             "description": `Out Octets for ${interfaceData.interface} on ${device.name}`,
             "oid": interfaceData.outOctetsOID,
             "deviceid": device.deviceid,
@@ -86,7 +86,7 @@ const DeviceInterfaces = ({ device, onMonitorSelected }: Props) => {
             "device_check_groupid": checkGroupID
           }).then((resp) => {
             http.post("/device-check", {
-              "name": `${interfaceData.interface} - In Octets`,
+              "name": "inOctets",
               "description": `In Octets for ${interfaceData.interface} on ${device.name}`,
               "oid": interfaceData.inOctetsOID,
               "deviceid": device.deviceid,
@@ -118,7 +118,6 @@ const DeviceInterfaces = ({ device, onMonitorSelected }: Props) => {
           </Box>
         )}
       </Box>
-
       {
         resp && (
           <Box>
@@ -134,7 +133,7 @@ const DeviceInterfaces = ({ device, onMonitorSelected }: Props) => {
             </Stack>
             <Card sx={{ mt: 2, p: 2 }}>
               <TableContainer>
-                <Table>
+                <Table size="small">
                   <TableHead>
                     <TableRow>
                       <TableCell>Interface</TableCell>
@@ -152,12 +151,13 @@ const DeviceInterfaces = ({ device, onMonitorSelected }: Props) => {
                           <TableCell>{key}</TableCell>
                           <TableCell>{interfaceData.ifHCInOctetsValue}</TableCell>
                           <TableCell>{interfaceData.ifHCOutOctetsValue}</TableCell>
-                          <TableCell>
+                          <TableCell sx={{ pt: 0, pb: 0 }}>
                             {
                               alreadyMonitored ? (
                                 <Typography variant="caption" color="info">Already Monitored</Typography>
                               ) : (
                                 <Checkbox
+                                  size="small"
                                   disabled={alreadyMonitored}
                                   onChange={(e) => {
                                     if (e.target.checked) {

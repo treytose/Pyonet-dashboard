@@ -20,6 +20,7 @@ import { Device } from "../../../types";
 import useHttp from "../../../hooks/useHttp";
 import DeviceInterfaces from "./components/DeviceInterfaces";
 import DeviceChecks from "./components/DeviceChecks";
+import DeviceStorage from "./components/DeviceStorage";
 
 const DevicePage = () => {
   const http = useHttp();
@@ -59,6 +60,7 @@ const DevicePage = () => {
             >
               <Tab label="Overview" />
               <Tab label="Interfaces" />
+              <Tab label="Storage" />
               <Tab label="Checks" />
               <Tab label="Settings" />
             </Tabs>
@@ -110,7 +112,7 @@ const DevicePage = () => {
                 <Grid container spacing={2} sx={{ mt: 2 }}>
                   <Grid item xs={12} md={8}>
                     <DeviceInterfaces device={device} onMonitorSelected={() => {
-                      setSelectedTab(2);
+                      setSelectedTab(3);
                       snackbar.success("Interfaces Monitored");
                     }} />
                   </Grid>
@@ -119,13 +121,25 @@ const DevicePage = () => {
             }
             {
               selectedTab == 2 && (
+                <Grid container spacing={2} sx={{ mt: 2 }}>
+                  <Grid item xs={12} md={8}>
+                    <DeviceStorage device={device} onMonitorSelected={() => {
+                      setSelectedTab(3);
+                      snackbar.success("Partitions Monitored");
+                    }} />
+                  </Grid>
+                </Grid>
+              )
+            }
+            {
+              selectedTab == 3 && (
                 <Card sx={{ mt: 2, p: 4 }}>
                   <DeviceChecks device={device} />
                 </Card>
               )
             }
             {
-              selectedTab == 3 && (
+              selectedTab == 4 && (
                 <Card sx={{ mt: 2, p: 4 }}>
                   <DeviceForm device={device} onCreated={() => {
                     http.get(`/device/${deviceid}`, { params: { joined: true } }).then((response) => {

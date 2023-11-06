@@ -87,7 +87,7 @@ const DeviceForm = ({ onCreated, device }: DeviceFormProps) => {
       snmp_community: device?.snmp_community || "public",
       snmp_version: device?.snmp_version || "2c",
       snmp_port: device?.snmp_port || 161,
-      pollerid: device?.pollerid || 0,
+      pollerid: device?.pollerid,
     },
   });
 
