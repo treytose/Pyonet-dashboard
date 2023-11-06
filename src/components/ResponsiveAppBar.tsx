@@ -57,24 +57,6 @@ function ResponsiveAppBar() {
     <AppBar position="static" sx={{ bgcolor: theme.palette.background.paper }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
-          <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
-            <Typography
-              variant="h6"
-              noWrap
-              sx={{
-                mr: 2,
-                display: { xs: "none", md: "flex" },
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                textDecoration: "none",
-              }}
-            >
-              LOGO
-            </Typography>
-          </Link>
-
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
@@ -112,7 +94,11 @@ function ResponsiveAppBar() {
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+          <img
+            src="/pyonet_logo.png"
+            alt="logo"
+            style={{ height: "35px", width: "auto", borderRadius: "50%", marginRight: "10px" }}
+          />
           <Typography
             variant="h5"
             noWrap
@@ -120,7 +106,7 @@ function ResponsiveAppBar() {
             href=""
             sx={{
               mr: 2,
-              display: { xs: "flex", md: "none" },
+              // display: { xs: "flex", md: "none" },
               flexGrow: 1,
               fontFamily: "monospace",
               fontWeight: 700,
@@ -129,7 +115,7 @@ function ResponsiveAppBar() {
               textDecoration: "none",
             }}
           >
-            LOGO
+            PYONET
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
